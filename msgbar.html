@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Simple Message Bar</title>
+	<style>
+
+	/* generic */
+	body { margin: 0; }
+	a {color: #4285f4; text-decoration: none; }
+	a:hover { text-decoration: underline; }
+	a:active { color: #db4437; text-decoration: none; }
+
+	/* bar */
+	.msgbar{
+		font-family:Helvetica,Arial,sans-serif;
+		font-size:14px;
+		font-weight:700;
+		color:#000;
+		text-shadow:.3px .3px .3px #FFF;
+		background-color:#f9edbe;
+		border-bottom:1px solid #f0c36d;
+		padding:0;
+		overflow-y: hidden;
+		max-height: 50px; /* approximate max height */
+		transition-property: border, max-height;
+		transition-duration: 0s, .4s;
+		transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+		/*transition-timing-function: ease-out;*/
+	}
+	.msgbar.closed { max-height: 0; border:0;}
+	.container {
+		min-width: 100px;
+		margin: 0 auto;
+		padding:10px;
+		text-align: center;
+	}	
+	button#close{
+		padding:0 0 0 10px;
+		cursor:pointer;
+		background:rgba(0,0,0,0);
+		border:0;
+	}
+	#close{
+		float:right;
+		font-size:18px;
+		font-weight:700;
+		line-height:.8em;
+		color:#000;
+		text-shadow:0 1px 0 #FFF;
+		opacity:.2;
+	}
+	</style>
+
+</head>
+<body>
+
+    <div class="msgbar closed">
+      <div class="container">
+        <button onclick="document.getElementById('close').parentNode.parentNode.classList.add('closed');" type="button" id="close">&times;</button>
+		This is a message and <a href="http://www.github.com">this</a> is a link.
+      </div>
+    </div>
+
+<script>
+	window.onload = function(){
+		document.getElementById('close').parentNode.parentNode.classList.remove('closed');
+	};
+</script>
+
+</body>
+</html>
+
+
