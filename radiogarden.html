@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<title>radiogarden</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">	
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="robots" content="index,follow">
+<meta property="og:locale" content="en_US">
+
+<script src="https://code.jquery.com/jquery-1.6.4.min.js"></script>
+
+<script>
+jQuery(function($) {
+
+	// GET variables?
+	var $_GET = {};
+	document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
+	    function decode(s) {
+	        return decodeURIComponent(s.split("+").join(" "));
+	    }
+	    $_GET[decode(arguments[1])] = decode(arguments[2]);
+	});
+
+	// Set a default place
+	if( ! $_GET["city"] ){
+		console.log('No city. Using default.')
+		$_GET["city"]='LbmJqSyY'; 
+	}
+
+	// Load stations for a given place
+	$.getJSON('http://www.whateverorigin.org/get?url=' + encodeURIComponent('http://radio.garden/api/ara/content/page/'+$_GET["city"]+'/channels' ) + '&callback=?', function(data){
+		var json = jQuery.parseJSON( data.contents );
+		$("#stations_title").html(json.data.subtitle+' for '+json.data.title);
+
+		// Display stations
+		var stations_html=''
+		for(var i = 0; i < json.data.content[0].items.length; i++) {
+			var item = json.data.content[0].items[i];
+			var station_id = item.href.split("/").pop();
+			var station_title = item.title;
+			stations_html+='<li><a class="stream" target="_blank" href="https://radio.garden/api/ara/content/listen/'+station_id+'/channel.mp3">'+station_title+'</a></li>'
+		}
+		$("#stations").html(stations_html)
+
+		// Override href clicking behavior: Append timestamp then open in new window
+		$('#stations a').click(function(e) {
+			e.preventDefault(); 
+			window.open(this.href+'?'+Date.now());  // Append unix timestamp in milliseconds
+		});
+	});
+/*
+	function update_ts(){
+		const now = Date.now(); // Unix timestamp in milliseconds
+		//console.log('Current time is: '+now);
+		link=$("a.stream ").attr("href").split('?')[0]+'?'+now
+		$('a.stream').attr("href", link);	
+	}
+	setInterval(update_ts, 2000); // Time in milliseconds
+*/
+
+})
+</script>
+
+<style></style>
+
+</head>
+<body>
+	<h1>How to get a radio garden stream?</h1>
+	<hr/>
+
+	<h2 id="places_title">Here's some (hardcoded) places...</h2>
+	<ul id="places">
+		<li><a href="?city=LbmJqSyY">San Francisco CA, United States</a></li>
+		<li><a href="?city=9Yi25umJ">New York NY, United States</a></li>
+		<li><a href="?city=WYa4vKGn">Amsterdam, Netherlands</a></li>
+		<li><a href="?city=B7DS4V1m">Paris, France</a></li>
+		<li><a href="?city=zBzV2plE">Rio de Janeiro, Brazil</a></li>
+		<li><a href="?city=MQfEnBji">Moscow, Russia</a></li>
+		<li><a href="?city=CruHl3iY">Shanghai, Chine</a></li>
+		<li><a href="?city=eR8K4rBb">Tokyo, Japan</a></li>
+	</ul>
+	<p><small>To get all places use <a href="https://radio.garden/api/ara/content/places">this endpoint</a> (huge list).</small></p>
+	<hr/>
+
+	<h3 id="stations_title">Stations...</h3>
+	<ol id="stations">
+	</ol>
+
+</body>
+</html>
+
