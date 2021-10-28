@@ -33,7 +33,7 @@ jQuery(function($) {
 	// Load stations for a given place
 	$.getJSON('http://www.whateverorigin.org/get?url=' + encodeURIComponent('http://radio.garden/api/ara/content/page/'+$_GET["city"]+'/channels' ) + '&callback=?', function(data){
 		var json = jQuery.parseJSON( data.contents );
-		$("#stations_title").html(json.data.subtitle+' for '+json.data.title);
+		$("#stations_title").html(json.data.subtitle+' for '+json.data.title+':');
 
 		// Display stations
 		var stations_html=''
@@ -75,7 +75,7 @@ jQuery(function($) {
 	<h1>How to get a radio garden stream?</h1>
 	<hr/>
 
-	<h2 id="places_title">Here's some (hardcoded) places...</h2>
+	<h2 id="places_title">Here's some (hardcoded) places:</h2>
 	<ul id="places">
 		<li><a href="?city=LbmJqSyY">San Francisco CA, United States</a></li>
 		<li><a href="?city=9Yi25umJ">New York NY, United States</a></li>
